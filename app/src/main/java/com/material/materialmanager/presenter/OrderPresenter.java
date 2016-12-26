@@ -1,12 +1,11 @@
 package com.material.materialmanager.presenter;
 
-import com.material.materialmanager.Bean.ProductProcess;
+import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.model.ProductProcessModel;
-import com.material.materialmanager.ui.IPlanView;
+import com.material.materialmanager.ui.IOrderView;
 import com.material.materialmanager.utils.LogUtils;
 
 import java.io.IOException;
-import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -15,26 +14,26 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Doing on 2016/12/23 0023.
+ * Created by Doing on 2016/12/26 0026.
  */
-public class ProductProcessPresenter {
+public class OrderPresenter {
 
-    private IPlanView planView;
+    private IOrderView orderView;
     private ProductProcessModel productProcessModel;
 
-    public ProductProcessPresenter(IPlanView planView) {
-        this.planView = planView;
+    public OrderPresenter(IOrderView orderView) {
+        this.orderView = orderView;
         productProcessModel = new ProductProcessModel();
     }
 
-    public void getPlan(final String productName) {
+    public void getUnsolvedOrder() {
 
-        Observable.create(new Observable.OnSubscribe<List<ProductProcess>>() {
+        Observable.create(new Observable.OnSubscribe<Order>() {
             @Override
-            public void call(Subscriber<? super List<ProductProcess>> subscriber) {
+            public void call(Subscriber<? super Order> subscriber) {
                 try {
-                    List<ProductProcess> productProcess = productProcessModel.getProductProcess(productName);
-                    subscriber.onNext(productProcess);
+                    Order order = productProcessModel.getUnsolvedOrder();
+                    subscriber.onNext(order);
                 } catch (IOException e) {
                     subscriber.onError(e);
                     e.printStackTrace();
@@ -42,7 +41,7 @@ public class ProductProcessPresenter {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<ProductProcess>>() {
+                .subscribe(new Observer<Order>() {
                     @Override
                     public void onCompleted() {
 
@@ -50,12 +49,17 @@ public class ProductProcessPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        planView.planError("网络出错！");
+                        LogUtils.i(e.getMessage());
+                        orderView.orderError("网络出错！");
                     }
 
                     @Override
-                    public void onNext(List<ProductProcess> productProcesses) {
-                        planView.planResult(productProcesses);
+                    public void onNext(Order order) {
+                        if (order != null) {
+                            orderView.orderResult(true, order);
+                        }else {
+                            orderView.orderResult(false, null);
+                        }
                     }
                 });
     }

@@ -100,12 +100,4 @@ public class ProductProcessModel {
         }
     }
 
-    public void postOrderTrack(int orderId, String name, String action) throws IOException {
-        Map<String, String> formData = new HashMap<>();
-        formData.put("userName", name);
-        formData.put("orderId", orderId + "");
-        formData.put("action", action);
-        httpUtils.synPostForm(Constants.URL_POST_ORDER_TRACK, formData);
-    }
-
 }

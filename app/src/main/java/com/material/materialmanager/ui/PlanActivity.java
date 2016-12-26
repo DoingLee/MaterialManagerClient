@@ -1,8 +1,10 @@
 package com.material.materialmanager.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,17 +15,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
+import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.presenter.ProductProcessPresenter;
+import com.material.materialmanager.utils.Constants;
+import com.material.materialmanager.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PlanActivity extends AppCompatActivity implements IPlanView {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class PlanActivity extends BaseActivity implements IPlanView {
 
     private Toolbar toolbar;
+    private TextView tvProductTitle;
+    private SweetAlertDialog pDialog ;
+    private FloatingActionButton fab;
 
     private ProductProcessPresenter productProcessPresenter;
+    private OrderTrackPoster orderTrackPoster;
+
+    private Order order;
+    private List<ProductProcess> productProcesses;
 
     private RecyclerView mRecyclerView;
     private MyAdapter myAdapter;
@@ -35,23 +51,50 @@ public class PlanActivity extends AppCompatActivity implements IPlanView {
 
         init();
         initToolBar();
-        productProcessPresenter.getPlan();
+
+        orderTrackPoster.postOrderTrack("获取订单");
+
+        order = Constants.order;
+        //产品名称标题
+        StringBuilder productTitle = new StringBuilder(order.getProductName());
+        productTitle.append("（");
+        productTitle.append(order.getCount());
+        productTitle.append("）");
+        tvProductTitle.setText(productTitle.toString());
+        //产品流程
+        productProcessPresenter.getPlan(order.getProductName());
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#5abfdb"));
+        pDialog.getProgressHelper().setRimColor(Color.parseColor("#0677d4"));
+        pDialog.setTitleText("正在获取产品流程...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
     }
 
     private void initToolBar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back_arrow);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+//        toolbar.setNavigationIcon(R.drawable.back_arrow);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
         toolbar.setTitleTextColor(Color.WHITE);
     }
 
+    @Override
+    public void onBackPressed() {
+        //disable back button
+    }
+
     private void init() {
+        orderTrackPoster = new OrderTrackPoster();
+        tvProductTitle = $(R.id.tv_product_title);
+        pDialog = new SweetAlertDialog(PlanActivity.this);
+        fab = $(R.id.fab);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_process);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -60,9 +103,27 @@ public class PlanActivity extends AppCompatActivity implements IPlanView {
     }
 
     @Override
-    public void showPlan(List<ProductProcess> productProcesses) {
+    public void planResult(final List<ProductProcess> productProcesses) {
+        pDialog.dismiss();
         MyAdapter myAdapter = new MyAdapter(this, productProcesses);
         mRecyclerView.setAdapter(myAdapter);
+        Constants.productProcesses = productProcesses;
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlanActivity.this, MaterialProcessActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void planError(String errorMsg) {
+        pDialog.dismiss();
+        new SweetAlertDialog(this)
+                .setTitleText("网络出错！")
+                .show();
     }
 
 

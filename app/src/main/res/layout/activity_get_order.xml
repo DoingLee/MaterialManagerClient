@@ -27,6 +27,7 @@
             android:layout_height="68dp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:id="@+id/btn_get_order"
             android:text="获取订单"
             android:textSize="@dimen/text_large"
             android:layout_marginTop="20dp"

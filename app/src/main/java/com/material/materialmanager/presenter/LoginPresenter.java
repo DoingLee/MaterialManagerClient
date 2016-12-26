@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.material.materialmanager.model.LoginModel;
 import com.material.materialmanager.ui.ILoginView;
+import com.material.materialmanager.utils.Constants;
 import com.material.materialmanager.utils.LogUtils;
 
 import java.io.IOException;
@@ -63,9 +64,10 @@ public class LoginPresenter {
                     }
 
                     @Override
-                    public void onNext(String s) {
-                        if (s != null) {
-                            loginView.loginResult(true, s);
+                    public void onNext(String userName) {
+                        if (userName != null) {
+                            loginView.loginResult(true, "登录成功！");
+                            Constants.userName = userName;
                         }else {
                             loginView.loginResult(false, "密码错误！");
                         }

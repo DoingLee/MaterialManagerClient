@@ -9,5 +9,13 @@ import java.util.List;
  */
 public interface IOrderView {
 
-    void setOrderResult(Order order);
+    /**
+     *
+     * @param hasUnsolvedOrder true:order非null， false:order为null
+     * @param order null：无unsolved订单
+     */
+    void orderResult(boolean hasUnsolvedOrder, Order order);
+
+    void orderError(String errorMsg);
+
 }

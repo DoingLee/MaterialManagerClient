@@ -9,5 +9,7 @@ import java.util.List;
  */
 public interface IPlanView {
 
-    void showPlan(List<ProductProcess> productProcesses);
+    void planResult(List<ProductProcess> productProcesses);
+
+    void planError(String errorMsg);
 }

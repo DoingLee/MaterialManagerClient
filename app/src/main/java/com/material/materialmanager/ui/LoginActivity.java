@@ -50,6 +50,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
                 pDialog.setTitleText("正在登录...");
                 pDialog.setCancelable(false);
                 pDialog.show();
+
                 loginPresenter.login(etAccountId.getText().toString(), etPassword.getText().toString());
             }
         });
