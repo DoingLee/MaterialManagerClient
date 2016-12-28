@@ -92,6 +92,7 @@ public class ProductProcessModel {
                 productProcess.setMaterialName(data.getString("materialName"));
                 productProcess.setBlenderName(data.getString("blenderName"));
                 productProcess.setWeight(data.getInt("weight"));
+                productProcess.setLocation(data.getString("location"));
                 productProcesses.add(productProcess);
             }
             return productProcesses;

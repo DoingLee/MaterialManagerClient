@@ -119,8 +119,10 @@ public class BlenderProcessActivity extends BaseActivity {
 
     private void handleBlenderQRCodeResult(String scanQRCodeResult) {
         if (scanQRCodeResult.equals(productProcesses.get(curProcess).getBlenderName())) {
-            new SweetAlertDialog(this)
-                    .setTitleText("混料罐正确！")
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+            sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+            sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+            sweetAlertDialog.setTitleText("混料罐正确！")
                     .setConfirmText("请扫描原料二维码~")
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
@@ -132,8 +134,10 @@ public class BlenderProcessActivity extends BaseActivity {
                     })
                     .show();
         } else {
-            new SweetAlertDialog(this)
-                    .setTitleText("混料罐错误！")
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+            sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+            sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+            sweetAlertDialog.setTitleText("混料罐错误！")
                     .setConfirmText("请重新扫描混料罐~")
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
@@ -149,8 +153,10 @@ public class BlenderProcessActivity extends BaseActivity {
         if (scanQRCodeResult.equals(productProcesses.get(curProcess).getMaterialName())) {
             curProcess = curProcess + 1;
             if (curProcess < allProcess) {
-                new SweetAlertDialog(this)
-                        .setTitleText("原料正确！")
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+                sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+                sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+                sweetAlertDialog.setTitleText("原料正确！")
                         .setConfirmText("进入下一步~")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -163,8 +169,10 @@ public class BlenderProcessActivity extends BaseActivity {
                         })
                         .show();
             } else {
-                new SweetAlertDialog(this)
-                        .setTitleText("原料正确！")
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+                sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+                sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+                sweetAlertDialog.setTitleText("原料正确！")
                         .setConfirmText("完成一个订单！")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override

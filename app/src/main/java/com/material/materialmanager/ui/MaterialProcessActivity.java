@@ -12,9 +12,7 @@ import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.utils.Constants;
-import com.material.materialmanager.utils.LogUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -24,7 +22,7 @@ public class MaterialProcessActivity extends BaseActivity {
     private Toolbar toolbar;
     private Button btnScan;
     private TextView tvMaterial;
-    private TextView tvCount;
+    private TextView tvLocation;
 
     private List<ProductProcess> productProcesses;
     private OrderTrackPoster orderTrackPoster;
@@ -74,7 +72,7 @@ public class MaterialProcessActivity extends BaseActivity {
 
         btnScan = $(R.id.btn_scan);
         tvMaterial = $(R.id.tv_material);
-        tvCount = $(R.id.tv_count);
+        tvLocation = $(R.id.tv_location);
 
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,17 +85,17 @@ public class MaterialProcessActivity extends BaseActivity {
 
     private void showProcess() {
         ProductProcess productProcess = productProcesses.get(curProcess);
-        showMaterialMsg(productProcess.getMaterialName(), productProcess.getWeight(), count);
+        showMaterialMsg(productProcess.getMaterialName(), productProcess.getWeight(), productProcess.getLocation());
     }
 
-    private void showMaterialMsg(String materialName, int weight, int count) {
+    private void showMaterialMsg(String materialName, int weight, String location) {
         StringBuilder sb = new StringBuilder(materialName);
         sb.append(" ");
         sb.append(weight + "");
         sb.append("g");
         String s = materialName + " " + weight + "g";
         tvMaterial.setText(s);
-        tvCount.setText(count + "份");
+        tvLocation.setText("位置：" + location);
     }
 
     @Override
@@ -117,8 +115,10 @@ public class MaterialProcessActivity extends BaseActivity {
         if (scanQRCodeResult.equals(productProcesses.get(curProcess).getMaterialName())) {
             curProcess = curProcess + 1;
             if (curProcess < allProcess) {
-                new SweetAlertDialog(this)
-                        .setTitleText("原料正确！")
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+                sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+                sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+                sweetAlertDialog.setTitleText("原料正确！")
                         .setConfirmText("进入下一步~")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -128,9 +128,11 @@ public class MaterialProcessActivity extends BaseActivity {
                             }
                         })
                         .show();
-            }else {
-                new SweetAlertDialog(this)
-                        .setTitleText("原料正确！")
+            } else {
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+                sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+                sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+                sweetAlertDialog.setTitleText("原料正确！")
                         .setConfirmText("开始投料操作~")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -145,9 +147,11 @@ public class MaterialProcessActivity extends BaseActivity {
                         })
                         .show();
             }
-        }else {
-            new SweetAlertDialog(this)
-                    .setTitleText("原料错误！")
+        } else {
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+            sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+            sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+            sweetAlertDialog.setTitleText("原料错误！")
                     .setConfirmText("请重新取料~")
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override

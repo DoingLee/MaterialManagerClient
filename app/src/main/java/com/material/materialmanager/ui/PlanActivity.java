@@ -82,6 +82,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
 //            }
 //        });
         toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("配料流程");
     }
 
     @Override

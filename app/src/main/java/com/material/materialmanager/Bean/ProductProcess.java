@@ -12,6 +12,7 @@ public class ProductProcess implements Parcelable{
     private String materialName;
     private int weight;
     private String blenderName;
+    private String location;
 
     public ProductProcess() {
     }
@@ -56,6 +57,14 @@ public class ProductProcess implements Parcelable{
         this.blenderName = blenderName;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "ProductProcess{" +
@@ -64,8 +73,11 @@ public class ProductProcess implements Parcelable{
                 ", materialName='" + materialName + '\'' +
                 ", weight=" + weight +
                 ", blenderName='" + blenderName + '\'' +
+                ", location='" + location + '\'' +
                 '}';
     }
+
+    /////////////////////////////////////////// Parcel     //////////////////////////////////////////
 
     public ProductProcess(Parcel parcel){
         readFromParcel(parcel);
@@ -78,6 +90,7 @@ public class ProductProcess implements Parcelable{
         materialName = in.readString();
         weight = in.readInt();
         blenderName = in.readString();
+        location = in.readString();
     }
 
     public static final Parcelable.Creator CREATOR=new Parcelable.Creator<ProductProcess>(){
@@ -108,5 +121,6 @@ public class ProductProcess implements Parcelable{
         dest.writeInt(weight);
         dest.writeString(materialName);
         dest.writeString(blenderName);
+        dest.writeString(location);
     }
 }
