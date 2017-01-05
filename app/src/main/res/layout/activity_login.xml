@@ -45,6 +45,18 @@
         app:bootstrapBrand="success"
         app:roundedCorners="true"/>
 
+    <Spinner
+        android:layout_width="280dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:entries = "@array/user_type"
+        android:prompt = "@string/user_type_prompt"
+        android:id="@+id/spinner_user_type"
+        />
+
     <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="280dp"
         android:layout_height="48dp"

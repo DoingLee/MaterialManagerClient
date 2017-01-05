@@ -177,8 +177,8 @@ public class BlenderProcessActivity extends BaseActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
-                                orderTrackPoster.postOrderTrack("完成投料");
-                                orderTrackPoster.postOrderTrack("完成订单");
+//                                orderTrackPoster.postOrderTrack("完成投料");
+//                                orderTrackPoster.postOrderTrack("完成订单");
 
                                 sDialog.dismissWithAnimation();
                                 Intent intent = new Intent(BlenderProcessActivity.this, GetOrderActivity.class);

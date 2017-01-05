@@ -16,16 +16,16 @@ import java.util.List;
  */
 public class Constants {
 //    public static final String hostName = "172.18.150.122";
-    public static final String hostName = "192.168.3.11";
+    public static final String hostName = "192.168.3.180";
     public static final String port = ":8080";
 
-    public static final String URL_GET_UNSOLVED_ORDER = "http://" + hostName + port +  "/order/1/unsolved/";
+    public static final String URL_GET_UNSOLVED_ORDERS = "http://" + hostName + port +  "/order/unsolved/";
     public static final String URL_GET_PRODUCT_PLAN = "http://" + hostName +  port + "/plan/";
     public static final String URL_POST_ORDER_TRACK = "http://" + hostName +  port + "/order_track/";
     public static final String URL_POST_LOGIN_IN = "http://" + hostName +  port + "/login/";
 
     //全局变量
-    public static Order order;
+    public static List<Order> orderList;
     public static List<ProductProcess> productProcesses;
 
     public static String userName;

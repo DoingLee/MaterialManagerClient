@@ -8,33 +8,34 @@
 
     <application
         android:allowBackup="true"
-        tools:replace="icon"
         android:icon="@drawable/material"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme"
+        tools:replace="icon">
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.GetOrderActivity"
-            android:launchMode = "singleTask"/>
-
-        <activity android:name=".ui.PlanActivity"
-            android:launchMode = "singleTask"/>
-
-        <activity android:name=".ui.MaterialProcessActivity"
-            android:launchMode = "singleTask"/>
-
-        <activity android:name=".ui.BlenderProcessActivity"
-            android:launchMode = "singleTask"/>
-
-        <activity android:name=".ui.ScanBarCodeActivity"
-            android:launchMode = "singleTask"/>
-
+        <activity
+            android:name=".ui.GetOrderActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.PlanActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.ReCheckMaterialActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.BlenderProcessActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.ScanBarCodeActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".ui.ScanOrderActivity" />
+        <activity android:name=".ui.OrderListActivity"></activity>
     </application>
 
 </manifest>

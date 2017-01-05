@@ -13,6 +13,8 @@ import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderPresenter;
 import com.material.materialmanager.utils.Constants;
 
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class GetOrderActivity extends BaseActivity implements IOrderView{
@@ -69,11 +71,11 @@ public class GetOrderActivity extends BaseActivity implements IOrderView{
     }
 
     @Override
-    public void orderResult(boolean hasUnsolvedOrder, Order order) {
+    public void orderResult(boolean hasUnsolvedOrder, List<Order> orderList) {
         pDialog.dismiss();
-        if (hasUnsolvedOrder) {
-            Constants.order = order;
-            Intent intent = new Intent(GetOrderActivity.this, PlanActivity.class);
+        if (hasUnsolvedOrder && orderList.size() > 0) {
+            Constants.orderList = orderList;
+            Intent intent = new Intent(GetOrderActivity.this, OrderListActivity.class);
             startActivity(intent);
         }else {
             new SweetAlertDialog(this)

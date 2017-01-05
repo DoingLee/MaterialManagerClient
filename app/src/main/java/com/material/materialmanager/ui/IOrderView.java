@@ -12,9 +12,9 @@ public interface IOrderView {
     /**
      *
      * @param hasUnsolvedOrder true:order非null， false:order为null
-     * @param order null：无unsolved订单
+     * @param orderList null：无unsolved订单
      */
-    void orderResult(boolean hasUnsolvedOrder, Order order);
+    void orderResult(boolean hasUnsolvedOrder, List<Order> orderList);
 
     void orderError(String errorMsg);
 

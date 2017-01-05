@@ -35,13 +35,13 @@ public class LoginPresenter {
      * @param accountId
      * @param password
      */
-    public void login(final String accountId, final String password)  {
+    public void login(final String accountId, final String password, final String userType)  {
 
         Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 try {
-                    String userName = loginModel.login(accountId, password);
+                    String userName = loginModel.login(accountId, password, userType);
                     subscriber.onNext(userName);
                 } catch (IOException e) {
                     LogUtils.i(e.getMessage());

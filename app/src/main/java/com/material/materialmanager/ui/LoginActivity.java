@@ -2,18 +2,14 @@ package com.material.materialmanager.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.LoginPresenter;
-import com.material.materialmanager.presenter.ProductProcessPresenter;
-import com.material.materialmanager.utils.LogUtils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -22,6 +18,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
     private BootstrapEditText etAccountId;
     private BootstrapEditText etPassword;
     private BootstrapButton btnLogin;
+    private Spinner spinnerUserType;
 
     SweetAlertDialog pDialog;
 
@@ -41,6 +38,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
         etAccountId = $(R.id.et_account_id);
         etPassword = $(R.id.et_password);
         btnLogin = $(R.id.btn_login);
+        spinnerUserType = $(R.id.spinner_user_type);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +49,8 @@ public class LoginActivity extends BaseActivity implements ILoginView {
                 pDialog.setCancelable(false);
                 pDialog.show();
 
-                loginPresenter.login(etAccountId.getText().toString(), etPassword.getText().toString());
+                String userType = spinnerUserType.getSelectedItem().toString();
+                loginPresenter.login(etAccountId.getText().toString(), etPassword.getText().toString(), userType);
             }
         });
 
@@ -61,9 +60,16 @@ public class LoginActivity extends BaseActivity implements ILoginView {
     @Override
     public void loginResult(boolean success, String msg) {
         if (success) {
-            pDialog.dismiss();
-            Intent intent = new Intent(LoginActivity.this, GetOrderActivity.class);
-            startActivity(intent);
+            String userType = spinnerUserType.getSelectedItem().toString();
+            if (userType.equals("取料操作员")) { //取料操作员
+                pDialog.dismiss();
+                Intent intent = new Intent(LoginActivity.this, GetOrderActivity.class);
+                startActivity(intent);
+            }else { //投料操作员
+                pDialog.dismiss();
+                Intent intent = new Intent(LoginActivity.this, ScanOrderActivity.class);
+                startActivity(intent);
+            }
         } else {
             pDialog.dismiss();
             new SweetAlertDialog(this)

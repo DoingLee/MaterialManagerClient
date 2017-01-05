@@ -19,13 +19,13 @@ public class OrderTrackPoster {
         orderTrackModel = new OrderTrackModel();
     }
 
-    public void postOrderTrack(final String action) {
+    public void postOrderTrack(final int orderId, final String action) {
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         cachedThreadPool.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    orderTrackModel.postOrderTrack(Constants.order.getOrderId(), Constants.userName, action);
+                    orderTrackModel.postOrderTrack(orderId, Constants.userName, action);
                 } catch (IOException e) {
                     LogUtils.i("OrderTrackPoster ====== 提交order track网络出错！");
                     e.printStackTrace();

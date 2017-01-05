@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +20,7 @@ import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.presenter.ProductProcessPresenter;
 import com.material.materialmanager.utils.Constants;
-import com.material.materialmanager.utils.LogUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -38,7 +35,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
     private ProductProcessPresenter productProcessPresenter;
     private OrderTrackPoster orderTrackPoster;
 
-    private Order order;
+    private List<Order> orderList;
     private List<ProductProcess> productProcesses;
 
     private RecyclerView mRecyclerView;
@@ -52,14 +49,12 @@ public class PlanActivity extends BaseActivity implements IPlanView {
         init();
         initToolBar();
 
-        orderTrackPoster.postOrderTrack("获取订单");
+//        orderTrackPoster.postOrderTrack("获取订单");
 
-        order = Constants.order;
+        orderList = Constants.orderList;
+        Order order = orderList.get(0);
         //产品名称标题
         StringBuilder productTitle = new StringBuilder(order.getProductName());
-        productTitle.append("（");
-        productTitle.append(order.getCount());
-        productTitle.append("）");
         tvProductTitle.setText(productTitle.toString());
         //产品流程
         productProcessPresenter.getPlan(order.getProductName());
@@ -74,13 +69,13 @@ public class PlanActivity extends BaseActivity implements IPlanView {
     private void initToolBar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        toolbar.setNavigationIcon(R.drawable.back_arrow);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("配料流程");
     }
@@ -113,7 +108,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlanActivity.this, MaterialProcessActivity.class);
+                Intent intent = new Intent(PlanActivity.this, ScanOrderActivity.class);
                 startActivity(intent);
             }
         });
@@ -141,7 +136,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
         @Override
         public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int viewType )
         {  //单个lRecyclerView里的布局
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_material, viewGroup, false);
             return new ViewHolder(v);
         }
 

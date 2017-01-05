@@ -34,8 +34,8 @@ public class ProductProcessModel {
      * @return null：服务器没有未处理订单； 非null：一个未处理订单
      * @throws IOException
      */
-    public Order getUnsolvedOrder() throws IOException {
-        String result = httpUtils.synGet(Constants.URL_GET_UNSOLVED_ORDER);
+    public List<Order> getUnsolvedOrder() throws IOException {
+        String result = httpUtils.synGet(Constants.URL_GET_UNSOLVED_ORDERS);
         try {
             return parseOrder(result);
         } catch (JSONException e) {
@@ -45,17 +45,23 @@ public class ProductProcessModel {
         }
     }
 
-    private Order parseOrder(String json) throws JSONException {
+    private List<Order> parseOrder(String json) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
         boolean success = jsonObject.getBoolean("success");
         if (success) {
-            JSONObject data = jsonObject.getJSONObject("data");
-            Order order = new Order();
-            order.setProductName(data.getString("productName"));
-            order.setCount(data.getInt("count"));
-            order.setCount(data.getInt("count"));
-            order.setOrderId(data.getInt("orderId"));
-            return order;
+            JSONArray datas = jsonObject.getJSONArray("data");
+            List<Order> orderList = new ArrayList<>();
+            for (int i = 0; i < datas.length(); i++) {
+                JSONObject data = datas.getJSONObject(i);
+                Order order = new Order();
+                order.setProductName(data.getString("productName"));
+                order.setCount(data.getInt("count"));
+                order.setOrderId(data.getInt("orderId"));
+
+                orderList.add(order);
+            }
+
+            return orderList;
         }else {
             return null;
         }

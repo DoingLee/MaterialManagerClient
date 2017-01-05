@@ -33,7 +33,7 @@ public class LoginModel {
      * @param password
      * @return null：密码错误， 非null：用户名字
      */
-    public String login(String accountId, String password) throws IOException {
+    public String login(String accountId, String password, String userType) throws IOException {
         String key = null;
         try {
             key = getMD5EncryptedString(password);
@@ -43,7 +43,7 @@ public class LoginModel {
         Map<String, String> map = new HashMap<>();
         map.put("accountId", accountId);
         map.put("password", key);
-        map.put("userType", "line_worker");
+        map.put("userType", userType);
         LogUtils.i(map.toString());
         LogUtils.i(Constants.URL_POST_LOGIN_IN);
         String result = httpUtils.synPostForm(Constants.URL_POST_LOGIN_IN, map);

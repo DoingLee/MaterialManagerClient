@@ -6,6 +6,7 @@ import com.material.materialmanager.ui.IOrderView;
 import com.material.materialmanager.utils.LogUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -28,12 +29,12 @@ public class OrderPresenter {
 
     public void getUnsolvedOrder() {
 
-        Observable.create(new Observable.OnSubscribe<Order>() {
+        Observable.create(new Observable.OnSubscribe<List<Order>>() {
             @Override
-            public void call(Subscriber<? super Order> subscriber) {
+            public void call(Subscriber<? super List<Order>> subscriber) {
                 try {
-                    Order order = productProcessModel.getUnsolvedOrder();
-                    subscriber.onNext(order);
+                    List<Order> orderList = productProcessModel.getUnsolvedOrder();
+                    subscriber.onNext(orderList);
                 } catch (IOException e) {
                     subscriber.onError(e);
                     e.printStackTrace();
@@ -41,7 +42,7 @@ public class OrderPresenter {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Order>() {
+                .subscribe(new Observer<List<Order>>() {
                     @Override
                     public void onCompleted() {
 
@@ -54,9 +55,9 @@ public class OrderPresenter {
                     }
 
                     @Override
-                    public void onNext(Order order) {
-                        if (order != null) {
-                            orderView.orderResult(true, order);
+                    public void onNext(List<Order> orderList) {
+                        if (orderList != null) {
+                            orderView.orderResult(true, orderList);
                         }else {
                             orderView.orderResult(false, null);
                         }

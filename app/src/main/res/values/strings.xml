@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">物料管理</string>
+    <string name="user_type_prompt">用户类型</string>
+
+    <array name="user_type">
+        <item>取料操作员</item>
+        <item>投料操作员</item>
+    </array>
 </resources>

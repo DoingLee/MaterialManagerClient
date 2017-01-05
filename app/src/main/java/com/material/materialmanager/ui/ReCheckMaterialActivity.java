@@ -17,7 +17,7 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MaterialProcessActivity extends BaseActivity {
+public class ReCheckMaterialActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private Button btnScan;
@@ -41,7 +41,7 @@ public class MaterialProcessActivity extends BaseActivity {
         init();
 
         productProcesses = Constants.productProcesses;
-        count = Constants.order.getCount();
+//        count = Constants.order.getCount();
         curProcess = 0;
         allProcess = productProcesses.size();
 
@@ -77,7 +77,7 @@ public class MaterialProcessActivity extends BaseActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent((MaterialProcessActivity.this), ScanBarCodeActivity.class);
+                Intent intent = new Intent((ReCheckMaterialActivity.this), ScanBarCodeActivity.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -137,10 +137,10 @@ public class MaterialProcessActivity extends BaseActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
-                                orderTrackPoster.postOrderTrack("完成取料");
+//                                orderTrackPoster.postOrderTrack("完成取料");
 
                                 sDialog.dismissWithAnimation();
-                                Intent intent = new Intent(MaterialProcessActivity.this, BlenderProcessActivity.class);
+                                Intent intent = new Intent(ReCheckMaterialActivity.this, BlenderProcessActivity.class);
                                 finish();
                                 startActivity(intent);
                             }
