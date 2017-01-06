@@ -1,9 +1,8 @@
-package com.material.materialmanager.ui;
+package com.material.materialmanager.ui.collect;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.material.materialmanager.Bean.Order;
-import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
+import com.material.materialmanager.ui.BaseActivity;
 import com.material.materialmanager.utils.Constants;
-import com.material.materialmanager.utils.LogUtils;
 
 import java.util.List;
 
@@ -31,7 +28,7 @@ public class OrderListActivity extends BaseActivity {
     private TextView tvOrderProductName;
     private BootstrapButton btnCheckMaterial;
     private RecyclerView recyclerViewOrders;
-    private FloatingActionButton fabInOrdersView;
+//    private FloatingActionButton fabInOrdersView;
 
     private OrderTrackPoster orderTrackPoster;
 
@@ -44,9 +41,9 @@ public class OrderListActivity extends BaseActivity {
 
         orderList = Constants.orderList;
         orderTrackPoster = new OrderTrackPoster();
-        for (Order order : orderList) {
-            orderTrackPoster.postOrderTrack(order.getOrderId(), "获取订单");
-        }
+//        for (Order order : orderList) {
+//            orderTrackPoster.postOrderTrack(order.getOrderId(), "获取订单");
+//        }
 
         initBar();
         init();
@@ -57,23 +54,23 @@ public class OrderListActivity extends BaseActivity {
         tvOrderProductName = $(R.id.tv_order_product_name);
         btnCheckMaterial = $(R.id.btn_check_materials);
         recyclerViewOrders = $(R.id.recycler_view_orders);
-        fabInOrdersView = $(R.id.fab_in_orders_view);
+//        fabInOrdersView = $(R.id.fab_in_orders_view);
 
         tvOrderProductName.setText(orderList.get(0).getProductName());
         btnCheckMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderListActivity.this, PlanActivity.class);
+                Intent intent = new Intent(OrderListActivity.this, PlanActivityForCollect.class);
                 startActivity(intent);
             }
         });
-        fabInOrdersView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OrderListActivity.this, ScanOrderActivity.class);
-                startActivity(intent);
-            }
-        });
+//        fabInOrdersView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(OrderListActivity.this, PrintOrderQRCodeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         recyclerViewOrders.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewOrders.setItemAnimator(new DefaultItemAnimator());

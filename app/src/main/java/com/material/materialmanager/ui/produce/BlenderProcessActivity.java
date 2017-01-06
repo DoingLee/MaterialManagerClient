@@ -1,9 +1,7 @@
-package com.material.materialmanager.ui;
+package com.material.materialmanager.ui.produce;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,9 +11,11 @@ import android.widget.TextView;
 import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
+import com.material.materialmanager.ui.BaseActivity;
+import com.material.materialmanager.ui.ScanBarCodeActivity;
+import com.material.materialmanager.ui.collect.GetOrderActivity;
 import com.material.materialmanager.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -26,6 +26,7 @@ public class BlenderProcessActivity extends BaseActivity {
     private Button btnScanBlender;
     private Button btnScanMaterial;
     private TextView tvBlenderName;
+    private TextView tvProduceOrderId;
     private TextView tvMaterialName;
 
     private OrderTrackPoster orderTrackPoster;
@@ -69,10 +70,13 @@ public class BlenderProcessActivity extends BaseActivity {
         curProcess = 0;
         allProcess = productProcesses.size();
 
+        tvProduceOrderId = $(R.id.tv_produce_order_id);
         btnScanBlender = $(R.id.btn_scan_blender);
         btnScanMaterial = $(R.id.btn_scan_material);
         tvBlenderName = $(R.id.tv_blender_name);
         tvMaterialName = $(R.id.tv_material_name);
+
+        tvProduceOrderId.setText("配置订单：" + Constants.orderId);
 
         btnScanBlender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +98,7 @@ public class BlenderProcessActivity extends BaseActivity {
     private void showProcessMsg() {
         ProductProcess productProcess = productProcesses.get(curProcess);
         tvBlenderName.setText(productProcess.getBlenderName());
-        tvMaterialName.setText(productProcess.getMaterialName());
+        tvMaterialName.setText(productProcess.getMaterialName() + productProcess.getWeight() + "g");
     }
 
     @Override
@@ -103,22 +107,41 @@ public class BlenderProcessActivity extends BaseActivity {
             if (resultCode == RESULT_CANCELED) {
                 //user cancel
             } else {
-                String scanQRCodeResult = data.getStringExtra("result");
-                handleBlenderQRCodeResult(scanQRCodeResult);
+                String blenderName = data.getStringExtra("result");
+                handleBlenderQRCodeResult(blenderName);
             }
         } else if (requestCode == 2) {
             if (resultCode == RESULT_CANCELED) {
                 //user cancel
             } else {
                 String scanQRCodeResult = data.getStringExtra("result");
-                handleMaterialQRCodeResult(scanQRCodeResult);
+                String[] s = scanQRCodeResult.split(":");
+
+                if (s.length == 3) {
+                    handleMaterialQRCodeResult(s[0], s[1], s[2]);
+
+                }else{
+                    SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+                    sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+                    sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+                    sweetAlertDialog.setTitleText("请扫描正确的物料二维码！")
+                            .setConfirmText("重新扫码~")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
+                }
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleBlenderQRCodeResult(String scanQRCodeResult) {
-        if (scanQRCodeResult.equals(productProcesses.get(curProcess).getBlenderName())) {
+    private void handleBlenderQRCodeResult(String blenderName) {
+        if (blenderName.equals(productProcesses.get(curProcess).getBlenderName())) {
             SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
             sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
             sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
@@ -149,8 +172,12 @@ public class BlenderProcessActivity extends BaseActivity {
         }
     }
 
-    private void handleMaterialQRCodeResult(String scanQRCodeResult) {
-        if (scanQRCodeResult.equals(productProcesses.get(curProcess).getMaterialName())) {
+    private void handleMaterialQRCodeResult(String orderId, String materialName, String weight) {
+        //原料名称和标准质量均一致才能投料
+        ProductProcess productProcess = productProcesses.get(curProcess);
+        if (materialName.equals(productProcess.getMaterialName()) &&
+                weight.equals(productProcess.getWeight() + "") &&
+                orderId.equals(Constants.orderId)) {
             curProcess = curProcess + 1;
             if (curProcess < allProcess) {
                 SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
@@ -181,7 +208,7 @@ public class BlenderProcessActivity extends BaseActivity {
 //                                orderTrackPoster.postOrderTrack("完成订单");
 
                                 sDialog.dismissWithAnimation();
-                                Intent intent = new Intent(BlenderProcessActivity.this, GetOrderActivity.class);
+                                Intent intent = new Intent(BlenderProcessActivity.this, ScanOrderActivity.class);
                                 finish();
                                 startActivity(intent);
                             }

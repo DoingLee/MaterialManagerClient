@@ -5,15 +5,26 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.material.materialmanager.ui.BlenderProcessActivity">
+    tools:context=".ui.produce.BlenderProcessActivity">
 
     <include layout="@layout/tool_bar"/>
+
+    <TextView
+        android:id="@+id/tv_produce_order_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:paddingTop="20dp"
+        android:text="配置订单：..."
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -73,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="25dp"
-            android:text="原料名"
+            android:text="原料名 xxg"
             android:textSize="@dimen/text_large"
             android:textStyle="bold" />
 

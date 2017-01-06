@@ -23,10 +23,14 @@ public class Constants {
     public static final String URL_GET_PRODUCT_PLAN = "http://" + hostName +  port + "/plan/";
     public static final String URL_POST_ORDER_TRACK = "http://" + hostName +  port + "/order_track/";
     public static final String URL_POST_LOGIN_IN = "http://" + hostName +  port + "/login/";
+    public static final String URL_HOST = "http://" + hostName +  port;
 
     //全局变量
     public static List<Order> orderList;
     public static List<ProductProcess> productProcesses;
+
+    public static String orderId; //投料操作全局订单号
+    public static String productName; //投料操作全局产品名
 
     public static String userName;
 }

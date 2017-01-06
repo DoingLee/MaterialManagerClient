@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.material.materialmanager.ui.collect.MaterialProcessActivity">
+
+    <include layout="@layout/tool_bar" />
+
+    <TextView
+        android:id="@+id/tv_order_id_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:paddingTop="20dp"
+        android:text="正在操作订单号：..."
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_margin="50dp"
+        android:background="@drawable/scan" />
+
+    <TextView
+        android:id="@+id/tv_material"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:paddingTop="50dp"
+        android:text="原料名 100g"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:text="位置"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold" />
+
+</LinearLayout>
+

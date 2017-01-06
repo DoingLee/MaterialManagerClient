@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.material.materialmanager.ui.OrderListActivity">
+    tools:context=".ui.collect.OrderListActivity">
 
 
     <include layout="@layout/tool_bar"/>
@@ -27,7 +27,7 @@
             android:padding="15dp"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="2sp"
-            card_view:cardBackgroundColor="@color/gray"
+            card_view:cardBackgroundColor="@color/theme"
             card_view:cardUseCompatPadding="true">
 
                 <TextView
@@ -47,12 +47,11 @@
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_below="@id/order_product_card"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:text="查看产品配方"
             android:id="@+id/btn_check_materials"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="12dp"
+            android:layout_margin="8dp"
             android:textSize="@dimen/text_main"
             app:bootstrapBrand="primary"
             app:roundedCorners="true"/>
@@ -66,19 +65,19 @@
             android:layout_margin="8dp" />
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_in_orders_view"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/go"
-        app:elevation="10dp"
-        app:borderWidth="0dp"
-        app:rippleColor="@color/green"
-        app:backgroundTint="@color/theme" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/fab_in_orders_view"-->
+        <!--android:layout_width="128dp"-->
+        <!--android:layout_height="128dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:src="@drawable/go"-->
+        <!--app:elevation="10dp"-->
+        <!--app:borderWidth="0dp"-->
+        <!--app:rippleColor="@color/green"-->
+        <!--app:backgroundTint="@color/theme" />-->
 
 </RelativeLayout>

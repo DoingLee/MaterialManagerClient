@@ -20,22 +20,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.GetOrderActivity"
+            android:name=".ui.collect.GetOrderActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.PlanActivity"
+            android:name=".ui.collect.PlanActivityForCollect"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.ReCheckMaterialActivity"
+            android:name=".ui.produce.ReCheckMaterialProcessActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.BlenderProcessActivity"
+            android:name=".ui.produce.BlenderProcessActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.ScanBarCodeActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.ScanOrderActivity" />
-        <activity android:name=".ui.OrderListActivity"></activity>
+        <activity android:name=".ui.produce.ScanOrderActivity" />
+        <activity android:name=".ui.collect.OrderListActivity" />
+        <activity android:name=".ui.collect.PrintOrderQRCodeActivity" />
+        <activity android:name=".ui.collect.MaterialProcessActivity" />
+        <activity android:name=".ui.produce.PlanActivityForProduce"></activity>
     </application>
 
 </manifest>

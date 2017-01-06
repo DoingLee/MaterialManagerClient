@@ -1,4 +1,4 @@
-package com.material.materialmanager.ui;
+package com.material.materialmanager.ui.collect;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,13 +19,15 @@ import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.presenter.ProductProcessPresenter;
+import com.material.materialmanager.ui.BaseActivity;
+import com.material.materialmanager.ui.IPlanView;
 import com.material.materialmanager.utils.Constants;
 
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class PlanActivity extends BaseActivity implements IPlanView {
+public class PlanActivityForCollect extends BaseActivity implements IPlanView {
 
     private Toolbar toolbar;
     private TextView tvProductTitle;
@@ -44,7 +46,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan);
+        setContentView(R.layout.activity_plan_for_collect);
 
         init();
         initToolBar();
@@ -88,7 +90,7 @@ public class PlanActivity extends BaseActivity implements IPlanView {
     private void init() {
         orderTrackPoster = new OrderTrackPoster();
         tvProductTitle = $(R.id.tv_product_title);
-        pDialog = new SweetAlertDialog(PlanActivity.this);
+        pDialog = new SweetAlertDialog(PlanActivityForCollect.this);
         fab = $(R.id.fab);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_process);
@@ -108,8 +110,9 @@ public class PlanActivity extends BaseActivity implements IPlanView {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlanActivity.this, ScanOrderActivity.class);
+                Intent intent = new Intent(PlanActivityForCollect.this, PrintOrderQRCodeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

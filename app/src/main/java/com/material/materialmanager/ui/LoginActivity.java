@@ -10,6 +10,8 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.LoginPresenter;
+import com.material.materialmanager.ui.collect.GetOrderActivity;
+import com.material.materialmanager.ui.produce.ScanOrderActivity;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 

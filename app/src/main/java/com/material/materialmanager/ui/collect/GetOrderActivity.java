@@ -1,8 +1,7 @@
-package com.material.materialmanager.ui;
+package com.material.materialmanager.ui.collect;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,13 +10,15 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderPresenter;
+import com.material.materialmanager.ui.BaseActivity;
+import com.material.materialmanager.ui.IOrderView;
 import com.material.materialmanager.utils.Constants;
 
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class GetOrderActivity extends BaseActivity implements IOrderView{
+public class GetOrderActivity extends BaseActivity implements IOrderView {
 
     private Toolbar toolbar;
     private BootstrapButton btnGetOrder;
