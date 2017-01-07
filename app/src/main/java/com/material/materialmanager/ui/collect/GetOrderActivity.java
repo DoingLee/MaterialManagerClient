@@ -10,6 +10,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderPresenter;
+import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.ui.BaseActivity;
 import com.material.materialmanager.ui.IOrderView;
 import com.material.materialmanager.utils.Constants;
@@ -24,6 +25,7 @@ public class GetOrderActivity extends BaseActivity implements IOrderView {
     private BootstrapButton btnGetOrder;
 
     private OrderPresenter orderPresenter;
+    private OrderTrackPoster orderTrackPoster;
 
     private SweetAlertDialog pDialog ;
 
@@ -39,6 +41,7 @@ public class GetOrderActivity extends BaseActivity implements IOrderView {
 
     private void init() {
         orderPresenter = new OrderPresenter(this);
+        orderTrackPoster = new OrderTrackPoster();
 
         btnGetOrder = $(R.id.btn_get_order);
         btnGetOrder.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +79,9 @@ public class GetOrderActivity extends BaseActivity implements IOrderView {
         pDialog.dismiss();
         if (hasUnsolvedOrder && orderList.size() > 0) {
             Constants.orderList = orderList;
+            for (Order order : orderList) {
+                orderTrackPoster.postOrderTrack(order.getOrderId(), "获取订单");
+            }
             Intent intent = new Intent(GetOrderActivity.this, OrderListActivity.class);
             startActivity(intent);
         }else {

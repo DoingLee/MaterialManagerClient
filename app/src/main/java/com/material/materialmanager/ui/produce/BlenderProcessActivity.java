@@ -66,6 +66,8 @@ public class BlenderProcessActivity extends BaseActivity {
 
     private void init() {
         orderTrackPoster = new OrderTrackPoster();
+        orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "开始投料");
+
         productProcesses = Constants.productProcesses;
         curProcess = 0;
         allProcess = productProcesses.size();
@@ -81,6 +83,12 @@ public class BlenderProcessActivity extends BaseActivity {
         btnScanBlender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String action = "投料开始:" +
+                        Constants.productName + ":" +
+                        productProcesses.get(curProcess).getMaterialName();
+                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+
                 Intent intent = new Intent((BlenderProcessActivity.this), ScanBarCodeActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -188,6 +196,11 @@ public class BlenderProcessActivity extends BaseActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
+                                String action = "投料完成:" +
+                                        Constants.productName + ":" +
+                                        productProcesses.get(curProcess - 1).getMaterialName();
+                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+
                                 showProcessMsg();
                                 btnScanBlender.setBackgroundResource(R.drawable.scan);
                                 btnScanBlender.setClickable(true);
@@ -204,8 +217,15 @@ public class BlenderProcessActivity extends BaseActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
-//                                orderTrackPoster.postOrderTrack("完成投料");
-//                                orderTrackPoster.postOrderTrack("完成订单");
+
+                                String action = "投料完成:" +
+                                        Constants.productName + ":" +
+                                        productProcesses.get(curProcess - 1).getMaterialName();
+                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+
+                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "完成投料");
+
+                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "完成订单");
 
                                 sDialog.dismissWithAnimation();
                                 Intent intent = new Intent(BlenderProcessActivity.this, ScanOrderActivity.class);

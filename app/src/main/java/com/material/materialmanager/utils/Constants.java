@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class Constants {
 //    public static final String hostName = "172.18.150.122";
-    public static final String hostName = "192.168.3.180";
+    public static final String hostName = "172.19.92.124";
     public static final String port = ":8080";
 
     public static final String URL_GET_UNSOLVED_ORDERS = "http://" + hostName + port +  "/order/unsolved/";

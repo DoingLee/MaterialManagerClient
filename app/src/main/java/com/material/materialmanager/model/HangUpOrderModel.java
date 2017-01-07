@@ -28,7 +28,7 @@ public class HangUpOrderModel {
         map.put("status", "unsolved");
         String url = Constants.URL_HOST + "/order/" + orderId + "/status/";
         LogUtils.i(url);
-        String result = httpUtils.synPostForm(url, map);
+        String result = httpUtils.synPutForm(url, map);
         LogUtils.i(result);
         try {
             boolean success = parseResult(result);

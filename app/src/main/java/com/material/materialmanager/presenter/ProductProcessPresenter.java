@@ -22,6 +22,7 @@ public class ProductProcessPresenter {
     private IPlanView planView;
     private ProductProcessModel productProcessModel;
 
+
     public ProductProcessPresenter(IPlanView planView) {
         this.planView = planView;
         productProcessModel = new ProductProcessModel();

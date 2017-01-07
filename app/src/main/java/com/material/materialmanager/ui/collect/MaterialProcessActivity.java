@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
+import com.material.materialmanager.presenter.OrderTrackPoster;
 import com.material.materialmanager.ui.BaseActivity;
 import com.material.materialmanager.ui.ScanBarCodeActivity;
 import com.material.materialmanager.utils.Constants;
@@ -29,7 +30,9 @@ public class MaterialProcessActivity extends BaseActivity {
     private TextView tvLocation;
     private Toolbar toolbar;
 
-    private SweetAlertDialog pDialog ;
+    private SweetAlertDialog pDialog;
+
+    private OrderTrackPoster orderTrackPoster;
 
     private List<ProductProcess> productProcessList;
     private List<Order> orderList;
@@ -51,16 +54,23 @@ public class MaterialProcessActivity extends BaseActivity {
     }
 
     private void init() {
+        orderTrackPoster = new OrderTrackPoster();
+
         btnScan = $(R.id.btn_scan);
         tvMaterial = $(R.id.tv_material);
         tvLocation = $(R.id.tv_location);
         tvOrderIdTitle = $(R.id.tv_order_id_title);
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
 
-
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String action = "取料开始:" +
+                        productProcessList.get(curProcess).getProductName() + ":" +
+                        productProcessList.get(curProcess).getMaterialName();
+                orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
+
                 Intent intent = new Intent((MaterialProcessActivity.this), ScanBarCodeActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -74,6 +84,8 @@ public class MaterialProcessActivity extends BaseActivity {
         totalOrder = orderList.size();
         totalCount = orderList.get(0).getCount();
         totalProcess = productProcessList.size();
+
+        orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), "开始取料");
 
         showCurrentOrderId();
         showCurrentProcessMaterial();
@@ -166,7 +178,7 @@ public class MaterialProcessActivity extends BaseActivity {
                         pDialog.setCancelable(false);
                         pDialog.show();
 
-                        handleWeighting();
+                        handleWeighting(); //开始称重、打印标签
                     }
                 })
                 .show();
@@ -181,7 +193,15 @@ public class MaterialProcessActivity extends BaseActivity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-//                        orderTrackPoster.postOrderTrack("完成取料");
+
+                        //最后一个订单的最后一个原料
+                        String action = "取料完成:" +
+                                productProcessList.get(curProcess - 1).getProductName() + ":" +
+                                productProcessList.get(curProcess - 1).getMaterialName();
+                        orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
+                        //最后一个订单
+                        orderTrackPoster.postOrderTrack(orderList.get(totalOrder - 1).getOrderId(), "完成取料");
+
                         sDialog.dismissWithAnimation();
 
                         Intent intent = new Intent(MaterialProcessActivity.this, GetOrderActivity.class);
@@ -208,10 +228,9 @@ public class MaterialProcessActivity extends BaseActivity {
     }
 
     private void handleWeighting() {
-
         //模拟蓝牙发送称重信息（需要称重的质量）和等待称重通过
         Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
+        TimerTask task = new TimerTask() {
             public void run() {
 
                 //计时结束后do something
@@ -255,7 +274,7 @@ public class MaterialProcessActivity extends BaseActivity {
         //2、发送该二维码图片到无线打印机打印
 
         Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
+        TimerTask task = new TimerTask() {
             public void run() {
 
                 //计时结束后do something
@@ -270,11 +289,35 @@ public class MaterialProcessActivity extends BaseActivity {
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
-                                        sDialog.dismissWithAnimation();
+
+                                        //只有换步骤的时候，curProcess 才要 - 1
+                                        if (curOrderNum == 0 && curCountNum == 0) {
+                                            String action = "取料完成:" +
+                                                    productProcessList.get(curProcess - 1).getProductName() + ":" +
+                                                    productProcessList.get(curProcess - 1).getMaterialName();
+                                            orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
+                                        } else {
+                                            String action = "取料完成:" +
+                                                    productProcessList.get(curProcess).getProductName() + ":" +
+                                                    productProcessList.get(curProcess).getMaterialName();
+                                            orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
+                                        }
+
+                                        if ((curProcess == totalProcess - 1) &&  //最后一个步骤
+                                                (curCountNum == 0) //取新订单
+                                                ) {
+                                            if (curOrderNum == 0) {
+                                                orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), "完成取料");
+                                            } else {
+                                                orderTrackPoster.postOrderTrack(orderList.get(curOrderNum - 1).getOrderId(), "完成取料");
+                                            }
+                                        }
 
                                         //显示下一个取料信息
                                         showCurrentProcessMaterial();
                                         showCurrentOrderId();
+                                        sDialog.dismissWithAnimation();
+
                                         sDialog.dismissWithAnimation();
                                     }
                                 })

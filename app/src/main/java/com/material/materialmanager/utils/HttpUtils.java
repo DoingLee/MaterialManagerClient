@@ -81,4 +81,20 @@ public class HttpUtils {
         return response.body().string();
     }
 
+    public String synPutForm(String url, Map<String, String> formDatas) throws IOException {
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        for (Map.Entry<String, String> formData : formDatas.entrySet()) {
+            formBuilder.add(formData.getKey(), formData.getValue());
+        }
+        RequestBody requestBody = formBuilder.build();
+        Request request = new Request.Builder()
+                .url(url)
+                .put(requestBody)
+                .build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("网络请求失败：" + response);
+        return response.body().string();
+    }
+
 }

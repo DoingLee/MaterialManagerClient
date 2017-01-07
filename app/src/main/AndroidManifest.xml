@@ -12,10 +12,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:replace="icon">
+
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,11 +34,22 @@
         <activity
             android:name=".ui.ScanBarCodeActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.produce.ScanOrderActivity" />
-        <activity android:name=".ui.collect.OrderListActivity" />
-        <activity android:name=".ui.collect.PrintOrderQRCodeActivity" />
-        <activity android:name=".ui.collect.MaterialProcessActivity" />
-        <activity android:name=".ui.produce.PlanActivityForProduce"></activity>
+        <activity
+            android:name=".ui.produce.ScanOrderActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.collect.OrderListActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.collect.PrintOrderQRCodeActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.collect.MaterialProcessActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.produce.PlanActivityForProduce"
+            android:launchMode="singleTask" />
+
     </application>
 
 </manifest>
