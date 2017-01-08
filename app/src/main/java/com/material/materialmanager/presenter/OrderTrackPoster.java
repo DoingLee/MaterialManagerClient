@@ -19,7 +19,7 @@ public class OrderTrackPoster {
         orderTrackModel = new OrderTrackModel();
     }
 
-    public void postOrderTrack(final int orderId, final String action) {
+    public void postOrderTrack(final String orderId, final String action) {
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         cachedThreadPool.execute(new Runnable() {
             @Override

@@ -347,7 +347,7 @@ public class MaterialProcessActivity extends BaseActivity {
     }
 
     private void showCurrentOrderId() {
-        int currentOrderId = orderList.get(curOrderNum).getOrderId();
+        String currentOrderId = orderList.get(curOrderNum).getOrderId();
         tvOrderIdTitle.setText("正在处理订单号：" + currentOrderId);
     }
 

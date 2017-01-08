@@ -56,7 +56,7 @@ public class ProductProcessModel {
                 Order order = new Order();
                 order.setProductName(data.getString("productName"));
                 order.setCount(data.getInt("count"));
-                order.setOrderId(data.getInt("orderId"));
+                order.setOrderId(data.getString("orderId"));
 
                 orderList.add(order);
             }

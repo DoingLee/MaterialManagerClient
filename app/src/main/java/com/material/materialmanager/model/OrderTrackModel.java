@@ -27,7 +27,7 @@ public class OrderTrackModel {
         httpUtils.synPostForm(Constants.URL_POST_ORDER_TRACK, formData);
     }
 
-    public void postOrderTrack(int orderId, String name, String action) throws IOException {
+    public void postOrderTrack(String orderId, String name, String action) throws IOException {
         Map<String, String> formData = new HashMap<>();
         formData.put("userName", name);
         formData.put("orderId", orderId + "");

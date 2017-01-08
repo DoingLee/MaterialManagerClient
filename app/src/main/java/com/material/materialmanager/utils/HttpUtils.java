@@ -97,4 +97,21 @@ public class HttpUtils {
         return response.body().string();
     }
 
+    public String synGetWithHeader(String url, HashMap<String, String> headers) throws IOException {
+        LogUtils.i(url);
+
+        Request.Builder builder = new Request.Builder();
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            builder.addHeader(header.getKey(), header.getValue());
+        }
+        builder.url(url);
+        Request request = builder.build();
+
+        Response response = okHttpClient.newCall(request).execute();
+        if (!response.isSuccessful()) {
+            throw new IOException("网络请求失败：" + response);
+        }
+        return response.body().string();
+    }
+
 }

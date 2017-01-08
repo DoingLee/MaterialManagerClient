@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class Order implements Parcelable{
     private String productName;
     private int count;
-    private int orderId;
+    private String orderId;
 
     public Order() {
     }
@@ -30,11 +30,11 @@ public class Order implements Parcelable{
         this.count = count;
     }
 
-    public int getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
@@ -55,7 +55,7 @@ public class Order implements Parcelable{
     public void readFromParcel(Parcel in){
         productName = in.readString();
         count = in.readInt();
-        orderId = in.readInt();
+        orderId = in.readString();
     }
 
     public static final Parcelable.Creator CREATOR=new Parcelable.Creator<Order>(){
@@ -83,6 +83,6 @@ public class Order implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(productName);
         dest.writeInt(count);
-        dest.writeInt(orderId);
+        dest.writeString(orderId);
     }
 }

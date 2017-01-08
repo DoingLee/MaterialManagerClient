@@ -66,7 +66,7 @@ public class BlenderProcessActivity extends BaseActivity {
 
     private void init() {
         orderTrackPoster = new OrderTrackPoster();
-        orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "开始投料");
+        orderTrackPoster.postOrderTrack(Constants.orderId, "开始投料");
 
         productProcesses = Constants.productProcesses;
         curProcess = 0;
@@ -87,7 +87,7 @@ public class BlenderProcessActivity extends BaseActivity {
                 String action = "投料开始:" +
                         Constants.productName + ":" +
                         productProcesses.get(curProcess).getMaterialName();
-                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
                 Intent intent = new Intent((BlenderProcessActivity.this), ScanBarCodeActivity.class);
                 startActivityForResult(intent, 1);
@@ -199,7 +199,7 @@ public class BlenderProcessActivity extends BaseActivity {
                                 String action = "投料完成:" +
                                         Constants.productName + ":" +
                                         productProcesses.get(curProcess - 1).getMaterialName();
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
                                 showProcessMsg();
                                 btnScanBlender.setBackgroundResource(R.drawable.scan);
@@ -221,11 +221,11 @@ public class BlenderProcessActivity extends BaseActivity {
                                 String action = "投料完成:" +
                                         Constants.productName + ":" +
                                         productProcesses.get(curProcess - 1).getMaterialName();
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "完成投料");
+                                orderTrackPoster.postOrderTrack(Constants.orderId, "完成投料");
 
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "完成订单");
+                                orderTrackPoster.postOrderTrack(Constants.orderId, "完成订单");
 
                                 sDialog.dismissWithAnimation();
                                 Intent intent = new Intent(BlenderProcessActivity.this, ScanOrderActivity.class);

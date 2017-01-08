@@ -52,7 +52,7 @@ public class ReCheckMaterialProcessActivity extends BaseActivity implements IHan
 
     private void init() {
         orderTrackPoster = new OrderTrackPoster();
-        orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "开始复核");
+        orderTrackPoster.postOrderTrack(Constants.orderId, "开始复核");
 
         hangUpOrderPresenter = new HangUpOrderPresenter(this);
 
@@ -72,7 +72,7 @@ public class ReCheckMaterialProcessActivity extends BaseActivity implements IHan
                 String action = "复核开始:" +
                         Constants.productName + ":" +
                         productProcesses.get(curProcess).getMaterialName();
-                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
                 Intent intent = new Intent((ReCheckMaterialProcessActivity.this), ScanBarCodeActivity.class);
                 startActivityForResult(intent, 1);
@@ -173,7 +173,7 @@ public class ReCheckMaterialProcessActivity extends BaseActivity implements IHan
                                 String action = "复核完成:" +
                                         Constants.productName + ":" +
                                         productProcesses.get(curProcess - 1).getMaterialName();
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
                                 showProcess();
                                 sDialog.dismissWithAnimation();
@@ -192,9 +192,9 @@ public class ReCheckMaterialProcessActivity extends BaseActivity implements IHan
                                 String action = "复核完成:" +
                                         Constants.productName + ":" +
                                         productProcesses.get(curProcess - 1).getMaterialName();
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), action);
+                                orderTrackPoster.postOrderTrack(Constants.orderId, action);
 
-                                orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "完成复核");
+                                orderTrackPoster.postOrderTrack(Constants.orderId, "完成复核");
 
                                 sDialog.dismissWithAnimation();
                                 Intent intent = new Intent(ReCheckMaterialProcessActivity.this, BlenderProcessActivity.class);
@@ -267,7 +267,7 @@ public class ReCheckMaterialProcessActivity extends BaseActivity implements IHan
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-                        orderTrackPoster.postOrderTrack(Integer.parseInt(Constants.orderId), "复核挂单");
+                        orderTrackPoster.postOrderTrack(Constants.orderId, "复核挂单");
 
                         sDialog.dismissWithAnimation();
 
