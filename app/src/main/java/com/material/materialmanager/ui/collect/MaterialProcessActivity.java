@@ -12,7 +12,9 @@ import com.material.materialmanager.Bean.Order;
 import com.material.materialmanager.Bean.ProductProcess;
 import com.material.materialmanager.R;
 import com.material.materialmanager.presenter.OrderTrackPoster;
+import com.material.materialmanager.presenter.WeightPresenter;
 import com.material.materialmanager.ui.BaseActivity;
+import com.material.materialmanager.ui.IWeightView;
 import com.material.materialmanager.ui.ScanBarCodeActivity;
 import com.material.materialmanager.utils.Constants;
 
@@ -22,7 +24,7 @@ import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MaterialProcessActivity extends BaseActivity {
+public class MaterialProcessActivity extends BaseActivity implements IWeightView {
 
     private Button btnScan;
     private TextView tvOrderIdTitle;
@@ -33,6 +35,7 @@ public class MaterialProcessActivity extends BaseActivity {
     private SweetAlertDialog pDialog;
 
     private OrderTrackPoster orderTrackPoster;
+    private WeightPresenter weightPresenter;
 
     private List<ProductProcess> productProcessList;
     private List<Order> orderList;
@@ -43,6 +46,7 @@ public class MaterialProcessActivity extends BaseActivity {
     private int curProcess;
     private int totalProcess; //步骤总数
 
+    private boolean finishFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +124,13 @@ public class MaterialProcessActivity extends BaseActivity {
                 String scanQRCodeResult = data.getStringExtra("result");
                 handleMaterialQRCodeResult(scanQRCodeResult);
             }
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_CANCELED) {
+                //user cancel
+            } else {
+                String weighterName = data.getStringExtra("result");
+                handleWeighting(weighterName); //开始称重、打印标签
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -130,7 +141,7 @@ public class MaterialProcessActivity extends BaseActivity {
             curCountNum++;
             if (curCountNum < totalCount) {
                 //当前原料、当前订单
-                showProcessSuccess();
+                showMaterialSuccess();
             } else {
                 //当前原料、下一个订单
                 curOrderNum++;
@@ -138,7 +149,7 @@ public class MaterialProcessActivity extends BaseActivity {
                 if (curOrderNum < totalOrder) {
                     //当前原料、当前订单
                     totalCount = orderList.get(curOrderNum).getCount();
-                    showProcessSuccess();
+                    showMaterialSuccess();
                 } else {
                     //下一个原料、下一个原料的第一个订单
                     curProcess++;
@@ -147,10 +158,11 @@ public class MaterialProcessActivity extends BaseActivity {
                     totalCount = orderList.get(curOrderNum).getCount();
                     if (curProcess < totalProcess) {
                         //当前原料、当前订单
-                        showProcessSuccess();
+                        showMaterialSuccess();
                     } else {
                         //取料完毕
-                        showProcessFinish();
+                        finishFlag = true;
+                        showMaterialSuccess();
                     }
                 }
             }
@@ -161,7 +173,7 @@ public class MaterialProcessActivity extends BaseActivity {
         }
     }
 
-    private void showProcessSuccess() {
+    private void showMaterialSuccess() {
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
         sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
@@ -172,13 +184,9 @@ public class MaterialProcessActivity extends BaseActivity {
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
 
-                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#5abfdb"));
-                        pDialog.getProgressHelper().setRimColor(Color.parseColor("#0677d4"));
-                        pDialog.setTitleText("正在等待称重通过...");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
+                        //扫描称重器二维码进行后续称重工作
+                        scanQRCodeForWeighterName();
 
-                        handleWeighting(); //开始称重、打印标签
                     }
                 })
                 .show();
@@ -188,17 +196,17 @@ public class MaterialProcessActivity extends BaseActivity {
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
         sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
         sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
-        sweetAlertDialog.setTitleText("原料正确！")
-                .setConfirmText("取料操作完成~")
+        sweetAlertDialog.setTitleText("取料操作完成！")
+                .setConfirmText("重新获取订单~")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
 
                         //最后一个订单的最后一个原料
-                        String action = "取料完成:" +
-                                productProcessList.get(curProcess - 1).getProductName() + ":" +
-                                productProcessList.get(curProcess - 1).getMaterialName();
-                        orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
+//                        String action = "取料完成:" +
+//                                productProcessList.get(curProcess - 1).getProductName() + ":" +
+//                                productProcessList.get(curProcess - 1).getMaterialName();
+//                        orderTrackPoster.postOrderTrack(orderList.get(curOrderNum).getOrderId(), action);
                         //最后一个订单
                         orderTrackPoster.postOrderTrack(orderList.get(totalOrder - 1).getOrderId(), "完成取料");
 
@@ -227,49 +235,48 @@ public class MaterialProcessActivity extends BaseActivity {
                 .show();
     }
 
-    private void handleWeighting() {
-        //模拟蓝牙发送称重信息（需要称重的质量）和等待称重通过
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-
-                //计时结束后do something
-                pDialog.dismiss();
-
-                runOnUiThread(new Runnable() {
+    private void scanQRCodeForWeighterName() {
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this);
+        sweetAlertDialog.setCancelable(false); //prevent dialog box from getting dismissed on back key pressed
+        sweetAlertDialog.setCanceledOnTouchOutside(false); // prevent dialog box from getting dismissed on outside
+        sweetAlertDialog.setTitleText("扫描称重器二维码！")
+                .setConfirmText("确定")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void run() {
-                        new SweetAlertDialog(MaterialProcessActivity.this)
-                                .setTitleText("称重通过！")
-                                .setConfirmText("开始打印称重二维码~")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        sDialog.dismissWithAnimation();
-                                        pDialog.setTitleText("正在等待打印称重二维码...");
-                                        pDialog.setCancelable(false);
-                                        pDialog.show();
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
 
-                                        handlePrintMaterialQRCode();
-                                    }
-                                })
-                                .show();
+                        Intent intent = new Intent((MaterialProcessActivity.this), ScanBarCodeActivity.class);
+                        startActivityForResult(intent, 2);
                     }
-                });
-            }
+                })
+                .show();
+    }
 
-        };
-        timer.schedule(task, 1000);  //5秒
+    private void handleWeighting(String weighterName) {
+
+        //开始发送称重信息到称重器进行称重（称重器名称、称重质量）
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#5abfdb"));
+        pDialog.getProgressHelper().setRimColor(Color.parseColor("#0677d4"));
+        pDialog.setTitleText("正在等待称重通过...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        int weight = productProcessList.get(curProcess - 1).getWeight();
+        weightPresenter = new WeightPresenter(weight,weighterName,this);
+        weightPresenter.weight();
+        //在weightResult函数中处理称重结果
 
     }
 
     private void handlePrintMaterialQRCode() {
 
         //模拟蓝牙发送称重二维码信息图片（"订单号:物料名称:物料标准质量"）到无线打印机
-        String qrCodeMsg = orderList.get(curOrderNum).getOrderId() + ":" +
-                productProcessList.get(curProcess).getMaterialName() + ":" +
-                productProcessList.get(curProcess).getWeight();
-        String url = "http://qr.liantu.com/api.php?text=" + qrCodeMsg;
+        //此处下标待调试。。
+//        String qrCodeMsg = orderList.get(curOrderNum).getOrderId() + ":" +
+//                productProcessList.get(curProcess).getMaterialName() + ":" +
+//                productProcessList.get(curProcess).getWeight();
+//        String url = "http://qr.liantu.com/api.php?text=" + qrCodeMsg;
         //1、使用url获取二维码图片
         //2、发送该二维码图片到无线打印机打印
 
@@ -313,12 +320,18 @@ public class MaterialProcessActivity extends BaseActivity {
                                             }
                                         }
 
-                                        //显示下一个取料信息
-                                        showCurrentProcessMaterial();
-                                        showCurrentOrderId();
-                                        sDialog.dismissWithAnimation();
+                                        if (finishFlag == false) { //未完成该批次订单，继续进入下一步
+                                            //显示下一个取料信息
+                                            showCurrentProcessMaterial();
+                                            showCurrentOrderId();
+                                            sDialog.dismissWithAnimation();
 
-                                        sDialog.dismissWithAnimation();
+                                            sDialog.dismissWithAnimation();
+                                        } else { //完成该批次订单，结束
+                                            sDialog.dismissWithAnimation();
+                                            showProcessFinish();
+                                        }
+
                                     }
                                 })
                                 .show();
@@ -351,4 +364,39 @@ public class MaterialProcessActivity extends BaseActivity {
         tvOrderIdTitle.setText("正在处理订单号：" + currentOrderId);
     }
 
+    @Override
+    public void weightResult(boolean success, String msg) {
+        pDialog.dismiss();
+
+        if (success) {
+            new SweetAlertDialog(MaterialProcessActivity.this)
+                    .setTitleText("称重通过！")
+                    .setConfirmText("开始打印称重二维码~")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            pDialog.setTitleText("正在等待打印称重二维码...");
+                            pDialog.setCancelable(false);
+                            pDialog.show();
+
+                            handlePrintMaterialQRCode();
+                        }
+                    })
+                    .show();
+        } else {
+            new SweetAlertDialog(MaterialProcessActivity.this)
+                    .setTitleText(msg)
+                    .setConfirmText("重新扫描称重器二维码进行称重~")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            scanQRCodeForWeighterName();
+                        }
+                    })
+                    .show();
+        }
+
+    }
 }

@@ -42,6 +42,7 @@ public class Constants {
     public static String userName;
 
     private static String getServerIp() {
+
         HttpUtils httpUtils = HttpUtils.getInstance();
         String ip;
         try {
